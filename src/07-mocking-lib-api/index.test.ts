@@ -34,21 +34,20 @@ describe('throttledGetDataFromApi', () => {
   });
 
   test('should perform request to correct provided url', async () => {
-    const mockedFn = jest.fn(async () => ({ commentDataMock }));
+    const mockFunc = jest.fn(async () => ({ commentDataMock }));
 
     const axiosMock = jest.spyOn(axios, 'create');
     axiosMock.mockReturnValue({
-      get: mockedFn,
+      get: mockFunc,
     } as never);
 
     await throttledGetDataFromApi('/comments/2');
     jest.runAllTimers();
 
-    expect(mockedFn).toHaveBeenLastCalledWith('/comments/2');
+    expect(mockFunc).toHaveBeenLastCalledWith('/comments/2');
   });
 
   test('should return response data', async () => {
-    jest.runAllTimers();
     const content = await throttledGetDataFromApi('/comments/2');
     expect(JSON.stringify(commentDataMock)).toBe(JSON.stringify(content));
   });
